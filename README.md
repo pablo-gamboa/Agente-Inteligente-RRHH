@@ -34,7 +34,7 @@ Python, LangChain, FAISS, GitHub Models, GPT-4o-mini, embeddings, Git y GitHub.
 
 ## Ejecución local
 
-Requiere Python 3.11 o una versión compatible con las dependencias, acceso a GitHub Models y un token propio con permisos mínimos necesarios.
+Se recomienda Python 3.12 de 64 bits (compatibilidad de dependencias aún no verificada), acceso a GitHub Models y un token propio con permisos mínimos necesarios.
 
 ```cmd
 python -m venv .venv
@@ -50,8 +50,14 @@ Completar `.env` con el token propio. Los modelos y el endpoint son configurable
 
 Ejemplos: ¿Cómo solicito vacaciones? ¿Qué beneficios existen? ¿Cómo solicito un permiso?
 
+## Ejemplo de consulta
+
+Pregunta: ¿Cómo solicito vacaciones?
+
+Según la política ficticia incluida, la solicitud se realiza con al menos 10 días hábiles de anticipación mediante el canal interno. Fuente esperada: `data/internos/politica_vacaciones.txt`. Este ejemplo ilustra el contenido documental; no corresponde a una ejecución verificada del modelo.
+
 ## Seguridad y alcance
 
-La versión de portafolio contiene documentos ficticios y no incorpora credenciales, índices serializados ni registros personales. El índice se genera en memoria para evitar la deserialización de archivos pickle. El procesamiento con modelos remotos envía fragmentos y consultas al proveedor: no introducir información confidencial. Las respuestas pueden contener errores y no constituyen asesoría laboral o legal.
+La versión de portafolio contiene documentos ficticios y no incorpora credenciales, índices serializados ni registros personales. El índice se genera en memoria en la primera consulta y se reutiliza durante la sesión, evitando la deserialización de archivos pickle. El procesamiento con modelos remotos envía fragmentos y consultas al proveedor: no introducir información confidencial. Las respuestas pueden contener errores y no constituyen asesoría laboral o legal.
 
 Proyecto desarrollado en equipo en un contexto formativo. Adaptación de portafolio con asistencia de IA. La ejecución contra los modelos remotos requiere validación con credenciales propias. La redistribución está sujeta a los derechos correspondientes.
