@@ -1,12 +1,12 @@
 import os
 from pathlib import Path
+from functools import lru_cache
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
+from langchain_openai import ChatOpenAI
+from src.crear_vectores import crear_base_vectorial
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
-FAISS_DIR = ROOT_DIR / "faiss_index"
 ENV_PATH = ROOT_DIR / ".env"
 
 load_dotenv(dotenv_path=ENV_PATH)
@@ -75,26 +75,18 @@ def _limpiar_formato_carta(texto: str) -> str:
     return "\n".join(lineas_limpias).strip()
 
 
+@lru_cache(maxsize=1)
+def _indice_sesion():
+    return crear_base_vectorial()
+
+
 def responder_consulta(pregunta: str) -> str:
     github_token = os.getenv("GITHUB_TOKEN")
 
     if not github_token:
         raise ValueError("No se encontró GITHUB_TOKEN en el archivo .env")
 
-    embeddings = OpenAIEmbeddings(
-        model=os.getenv("EMBEDDING_MODEL", "openai/text-embedding-3-small"),
-        api_key=github_token,
-        base_url=os.getenv("OPENAI_BASE_URL", "https://models.github.ai/inference")
-    )
-
-    from src.crear_vectores import cargar_documentos_txt, DATA_DIR
-    from langchain_text_splitters import RecursiveCharacterTextSplitter
-
-    # Construir el índice desde textos locales; no cargar archivos pickle.
-    chunks = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50).split_documents(
-        cargar_documentos_txt(DATA_DIR)
-    )
-    vectorstore = FAISS.from_documents(chunks, embeddings)
+    vectorstore = _indice_sesion()
 
     documentos_relevantes = vectorstore.similarity_search(pregunta, k=3)
     contexto = "\n\n".join([doc.page_content for doc in documentos_relevantes])
