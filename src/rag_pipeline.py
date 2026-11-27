@@ -116,7 +116,7 @@ No uses formato de carta, no firmes la respuesta y no incluyas placeholders.
         model=os.getenv("CHAT_MODEL", "openai/gpt-4o-mini"),
         temperature=0,
         api_key=github_token,
-        base_url="https://models.inference.ai.azure.com"
+        base_url=os.getenv("OPENAI_BASE_URL", "https://models.github.ai/inference")
     )
 
     respuesta = llm.invoke(prompt_final)
