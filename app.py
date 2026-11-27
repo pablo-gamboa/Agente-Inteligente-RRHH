@@ -1,0 +1,29 @@
+from src.rag_pipeline import responder_consulta
+
+
+def main():
+    print("Asistente inteligente de RRHH con LLM y RAG")
+    print("Escribe tu consulta o escribe 'salir' para terminar.\n")
+
+    while True:
+        pregunta = input("Consulta: ")
+
+        if pregunta.strip().lower() == "salir":
+            print("Programa finalizado.")
+            break
+
+        if not pregunta.strip():
+            print("Debes ingresar una consulta.")
+            continue
+
+        try:
+            respuesta = responder_consulta(pregunta)
+            print("\nRespuesta:")
+            print(respuesta)
+            print("\n" + "-" * 60 + "\n")
+        except Exception as e:
+            print("No se pudo procesar la consulta. Revisa la configuración y la disponibilidad del modelo.")
+
+
+if __name__ == "__main__":
+    main()
